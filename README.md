@@ -17,9 +17,10 @@ In the environment prepared for use, open the file lasvegas_code.py and run it.
 A new player automatically has 10 chips. 
 You must choose a number and bet a certain amount on it (no more than you have).
 After clicking on the "play" or "enter" button, two dice are rolled:
-    1) If the guessed number falls out - you get as many points as you bet.
-    2) If the number on both dice falls out, you get triple the amount you bet.
-    3) If "your" number does not come up, you lose the same amount of points.
+
+    1. If the guessed number falls out - you get as many points as you bet.
+    2. If the number on both dice falls out, you get triple the amount you bet.
+    3. If "your" number does not come up, you lose the same amount of points.
 
 After you exit the game, your result is saved in the overall rating and when you log back into your account you will have the same amount of chips.
 
@@ -48,9 +49,10 @@ We wish you good luck!
 У нового игрока автоматически 10 фишек. 
 Вы должны выбрать число и поставить на него определенную сумму (не больше, чем у вас есть).
 После клика на кнопку "играть" или "enter" бросается два кубика:
-    1) Если выпало загаданное число - вы получаете столько очков, сколько поставили.
-    2) Если выпало загаданное число на обоих кубиках - получаете утроенную поставленную сумму.
-    3) Если "ваше" число не выпадает - вы теряете такую же сумму очков.
+
+    1. Если выпало загаданное число - вы получаете столько очков, сколько поставили.
+    2. Если выпало загаданное число на обоих кубиках - получаете утроенную поставленную сумму.
+    3. Если "ваше" число не выпадает - вы теряете такую же сумму очков.
 
 После выхода из игры ваш результат сохраняется в общем рейтинге и при повторном входе в аккаунт у вас будет это же количество фишек.
 
