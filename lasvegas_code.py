@@ -18,7 +18,7 @@ class StartWindow(QWidget):
         layout = QVBoxLayout()
 
         banner = QLabel()
-        background_image = QPixmap("lasvegas.png")
+        background_image = QPixmap("lasvegas_banner.png")
         banner.setPixmap(background_image)
 
         register_button = QPushButton('Зарегестрироваться')
