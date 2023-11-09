@@ -467,7 +467,7 @@ class RulesWindow(QWidget):
         self.setLayout(layout)
       
     def play_game(self):
-        self.window = MainWindow(100, self.user)
+        self.window = MainWindow(10, self.user)
         self.window.show()
         self.close()
 
