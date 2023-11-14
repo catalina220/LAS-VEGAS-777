@@ -424,6 +424,8 @@ class RatingWindow(QWidget):
         self.rates.setStyleSheet("font: bold 12px; color: black; background-color: white")
         layout.addWidget(self.rates)
 
+        self.common()
+
         play_button = QPushButton('Играть снова')
         play_button.setStyleSheet("font: bold 12px; color: red;")
         play_button.clicked.connect(self.play_game)
