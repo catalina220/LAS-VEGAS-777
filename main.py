@@ -8,11 +8,13 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 
 conn = sqlite3.connect('users.db')
-cursor = conn.cursor()
+cursor = conn.cursor() #Создаем курсор к базе данных из файла users.db
 
+#Начальное окно
 class StartWindow(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        #Устанавливаем интерфейс
 
         self.setWindowTitle('Лас Вегас')
         self.setGeometry(200, 200, 450, 450)
@@ -49,10 +51,11 @@ class StartWindow(QWidget):
         self.login_window.show()
         self.close()
 
-
+#Окно авторизации
 class LoginWindow(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        #Устанавливаем интерфейс
 
         self.setStyleSheet("background-color: black;")
         self.setGeometry(200, 200, 300, 100)
@@ -104,6 +107,7 @@ class LoginWindow(QWidget):
             self.window.close()
 
         else:
+            #Проверка логина и пароля
             with open('users.csv', 'r') as file:
                 reader = list(csv.reader(file, delimiter=';', quotechar='"'))
 
@@ -112,6 +116,7 @@ class LoginWindow(QWidget):
                 coins = list(map(lambda i: i[2], reader))
 
                 if user_name not in users:
+                    #Ошибка в логине
                     self.window = MyDialog('Такого пользователя уже существует')
                     self.window.show()
                     self.window.close()
@@ -125,15 +130,19 @@ class LoginWindow(QWidget):
                         self.window.show()
                         self.close()
                     else:
+                        #Ошибка в пароле 
                         self.window = MyDialog('Неправильный пароль')
                         self.window.show()
                         self.window.close()
 
                         self.password_input.setText('')
 
+
+#Окно регистрации
 class RegisterWindow(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        #Устанавливаем интерфейс
 
         self.setStyleSheet("background-color: black;")
         self.setGeometry(200, 200, 300, 100)
@@ -184,7 +193,9 @@ class RegisterWindow(QWidget):
                 reader = csv.reader(file, delimiter=';', quotechar='"')
                 users = list(map(lambda i: i[0], reader))
 
+            #Проверка логина и пароля
             if user_name in users:
+                #Ошибка ввода логина
                 self.window = MyDialog('Такой пользователь уже существует')
                 self.window.show()
                 self.window.close()
@@ -196,6 +207,7 @@ class RegisterWindow(QWidget):
                     writer = csv.writer(file, delimiter=';')
                     writer.writerow([user_name, password, 10])
 
+                #Добавляем в базу данных пользователя
                 cursor.execute("INSERT INTO users (login, password, coins, level_id) VALUES (?, ?, ?, ?)", (user_name, password, '10', '1'))
                 conn.commit()
     
@@ -209,9 +221,11 @@ class RegisterWindow(QWidget):
         self.close()
         
 
+#Окно игры
 class MainWindow(QWidget):
     def __init__(self, coin, user, parent=None):
         super().__init__(parent)
+        #Устанавливаем интерфейс
 
         self.setStyleSheet("background-color: black;")
 
@@ -284,12 +298,14 @@ class MainWindow(QWidget):
         self.setLayout(layout)
 
     def keyPressEvent(self, event):
+        #Проверка нажатие кнопки (если нажата, начинаем игру)
         if event.key() == Qt.Key_Escape:
             self.close()
         else:
             self.play_game()
 
     def rating(self):
+        #Обновление пользовательские данные
         cursor.execute("UPDATE users SET coins = ? WHERE login = ?", (str(self.coin), self.user))
         conn.commit()
 
@@ -317,6 +333,7 @@ class MainWindow(QWidget):
 
     def play_game(self):
         try:
+            #Ошибка ввода ставки
             if int(self.bet.text()) > self.coin:
                 self.window = MyDialog('Недостаточно средств')
                 self.window.show()
@@ -326,12 +343,14 @@ class MainWindow(QWidget):
                 self.bet.setText('')
 
             else:
+                #'Бросаем кости'
                 number = self.comboBox.currentText()
                 bet = self.bet.text()
 
                 self.coins.setText(str(self.coin))
                 time.sleep(1)
 
+                #Выбор ранжомных чисел 
                 number1 = str(random.randint(1, 6))
                 number2 = str(random.randint(1, 6))
 
@@ -345,6 +364,7 @@ class MainWindow(QWidget):
                 pixmap = QPixmap(f"cube{number2}.png")
                 self.number2_pic.setPixmap(pixmap)
 
+                #Вывод статуса на экран
                 if int(self.number1_label.text()) == int(self.number2_label.text()) == number:
                     self.coin += 3 * int(self.bet.text())
                     self.coins.setText(str(self.coin))
@@ -369,15 +389,18 @@ class MainWindow(QWidget):
                     self.play_button.setEnabled(False)
 
         except ValueError:
+            #Ошибка ввода ставки
             self.window = MyDialog('Нельзя сделать такую ставку. Ставить можно только целое число')
             self.window.show()
             self.bet.setText('')
             self.window.close()
 
 
+#Окно рейтинга
 class RatingWindow(QWidget):
     def __init__(self, user, parent=None):
         super().__init__(parent)
+        #Устанавливаем интерфейс
 
         self.setGeometry(200, 200, 400, 200)
 
@@ -424,6 +447,7 @@ class RatingWindow(QWidget):
         self.rates.setStyleSheet("font: bold 12px; color: black; background-color: white")
         layout.addWidget(self.rates)
 
+        #Выводим общий рейтинг
         self.common()
 
         play_button = QPushButton('Играть снова')
@@ -483,6 +507,7 @@ class RatingWindow(QWidget):
             self.rates.setText('\n'.join(rating))
         
     def beginner(self):
+        #Выводим рейтинг среди beginners
         with open('users.csv', 'r') as file:
             reader = csv.reader(file, delimiter=';', quotechar='"')
             reader = list(filter(lambda i: str(i[-1]) == '1', reader))
@@ -501,6 +526,7 @@ class RatingWindow(QWidget):
             self.rates.setText('\n'.join(rating))
         
     def medium(self):
+        #Выводим рейтинг среди mediums
         with open('users.csv', 'r') as file:
             reader = csv.reader(file, delimiter=';', quotechar='"')
             reader = list(filter(lambda i: str(i[-1]) == '2', reader))
@@ -519,6 +545,7 @@ class RatingWindow(QWidget):
             self.rates.setText('\n'.join(rating))
 
     def ultra(self):
+        #Выводим рейтинг среди ultras
         with open('users.csv', 'r') as file:
             reader = csv.reader(file, delimiter=';', quotechar='"')
             reader = list(filter(lambda i: str(i[-1]) == '3', reader))
@@ -537,9 +564,12 @@ class RatingWindow(QWidget):
             self.rates.setText('\n'.join(rating))
 
 
+#Окно с правилами
 class RulesWindow(QWidget):
     def __init__(self, user, parent=None):
         super().__init__(parent)
+        #Устанавливаем интерфейс
+
         self.setGeometry(200, 200, 200, 400)
         self.setStyleSheet("background-color: black;")
         self.user = user
@@ -582,7 +612,7 @@ class RulesWindow(QWidget):
         self.start_window.show()
         self.close()
 
-
+#Окно с ошибкой
 class MyDialog(QDialog):
     def __init__(self, text, parent=None):
         super(MyDialog, self).__init__(parent)
