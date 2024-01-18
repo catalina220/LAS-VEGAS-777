@@ -61,3 +61,10 @@ We wish you good luck!
 - Нельзя поставить больше фишек, чем у вас есть на данный момент.
 
 Желаем вам удачи!
+
+
+## Связаться с автором (Contact the author):
+
+telegram: @protein0065
+
+Gmail: ekoterina.samarina@gmail.com
